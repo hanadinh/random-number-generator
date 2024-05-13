@@ -7,7 +7,7 @@ import org.opensourcephysics.controls.AbstractSimulation;
 import org.opensourcephysics.controls.SimulationControl;
 import org.opensourcephysics.frames.PlotFrame;
 
-public class Correlations extends AbstractSimulation {
+public class HiddenCorrelations extends AbstractSimulation {
 	Random rand = new Random();
 	int totalSteps;
 	LCG lcg;
@@ -19,7 +19,7 @@ public class Correlations extends AbstractSimulation {
 	double[] lcgValues;
     double[] gfsrValues;
 	
-	public Correlations() {
+	public HiddenCorrelations() {
 	}
 	
 	public void initialize() {
@@ -51,7 +51,7 @@ public class Correlations extends AbstractSimulation {
 	}
 	
 	public static void main(String[] args) {
-        SimulationControl.createApp(new Correlations());
+        SimulationControl.createApp(new HiddenCorrelations());
     }
 	
 	protected void doStep() {
