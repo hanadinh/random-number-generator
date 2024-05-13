@@ -29,8 +29,8 @@ public class LCG extends RandomGenerator {
     }
 
     public static void main(String[] args) {
-        Random rand = new Random();
-        long seed = rand.nextLong();
+//        Random rand = new Random();
+//        long seed = rand.nextLong();
         LCG lcg = new LCG(12, 16807, 2147483647, 0);
 //        LCG lcg = new LCG(1, 3, 32, 4);
         HashSet<Double> set = new HashSet<>();
