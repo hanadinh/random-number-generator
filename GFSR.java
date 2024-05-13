@@ -1,6 +1,5 @@
 package final_project;
 
-import java.util.Arrays;
 
 /*
  * Generalized Feedback Shift Register algorithm for generating random numbers
@@ -25,8 +24,8 @@ public class GFSR extends RandomGenerator {
     }
 
     public double nextRandom() {
-//        int j = (currentIndex < q) ? (currentIndex + q) : (currentIndex - p + q); // FROM TEXTBOOK BUT INCORRECT
-    	int j = (currentIndex < q) ? (currentIndex + p - q) : (currentIndex - q);
+        int j = (currentIndex < (p - q)) ? (currentIndex + q) : (currentIndex - p + q); // FROM TEXTBOOK BUT INCORRECT
+//    	int j = (currentIndex < (p - q)) ? (currentIndex + p - q) : (currentIndex - q);
         int randomNum = sequence[currentIndex] ^ sequence[j];
         currentIndex = (currentIndex + 1) % p;
         return (double) randomNum  / Integer.MAX_VALUE;
