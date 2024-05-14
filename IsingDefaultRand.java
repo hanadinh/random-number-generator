@@ -2,9 +2,11 @@ package final_project;
 
 import java.util.Random;
 
-public class IsingModelMetropolisDefaultRand extends IsingModelMetropolis {
-    public IsingModelMetropolisDefaultRand(long seed, double T) {
-        super(seed, T);
+import org.opensourcephysics.frames.LatticeFrame;
+
+public class IsingDefaultRand extends Ising {
+    public IsingDefaultRand(LatticeFrame displayFrame, long seed) {
+        super(displayFrame, seed);
     }
 
     @Override

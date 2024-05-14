@@ -39,7 +39,7 @@ public class IsingModelMetropolisApp extends AbstractSimulation {
         	int i = runs;
             long seed = rand.nextLong();
 
-            IsingModelMetropolisLCG modelLCG = new IsingModelMetropolisLCG(seed, T_c);
+            IsingLCG modelLCG = new IsingLCG(seed, T_c);
             modelLCG.runSimulation(steps);
             double energyLCG = modelLCG.computeEnergy();
             double specificHeatLCG = modelLCG.computeSpecificHeat();
@@ -48,7 +48,7 @@ public class IsingModelMetropolisApp extends AbstractSimulation {
             energyFrame.append(0, i + 1, energyLCG);
             specificHeatFrame.append(0, i + 1, specificHeatLCG);
 
-            IsingModelMetropolisGFSR modelGFSR = new IsingModelMetropolisGFSR(seed, T_c);
+            IsingGFSR modelGFSR = new IsingGFSR(seed, T_c);
             modelGFSR.runSimulation(steps);
             double energyGFSR = modelGFSR.computeEnergy();
             double specificHeatGFSR = modelGFSR.computeSpecificHeat();

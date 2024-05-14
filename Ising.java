@@ -4,7 +4,7 @@ import org.opensourcephysics.frames.*;
 
 public abstract class Ising {
   public static final double criticalTemperature = 2.0/Math.log(1.0+Math.sqrt(2.0));
-  public int L = 32;
+  public int L = 16;
   public int N = L*L;                 // number of spins
   public double temperature = criticalTemperature;
   public int mcs = 0;                 // number of MC moves per spin
@@ -18,10 +18,10 @@ public abstract class Ising {
   public double[] w = new double[9]; // array to hold Boltzmann factors
   public LatticeFrame lattice;
   protected RandomGenerator randGen;
-
-  public void initialize(int L, LatticeFrame displayFrame, long seed) {
+  
+  
+  public Ising(LatticeFrame displayFrame, long seed) {
     lattice = displayFrame;
-    this.L = L;
     this.randGen = createRandomGenerator(seed);
     N = L*L;
     lattice.resizeLattice(L, L); // set lattice size
@@ -84,27 +84,3 @@ public abstract class Ising {
     mcs++;
   }
 }
-
-/* 
- * Open Source Physics software is free software; you can redistribute
- * it and/or modify it under the terms of the GNU General Public License (GPL) as
- * published by the Free Software Foundation; either version 2 of the License,
- * or(at your option) any later version.
-
- * Code that uses any portion of the code in the org.opensourcephysics package
- * or any subpackage (subdirectory) of this package must must also be be released
- * under the GNU GPL license.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston MA 02111-1307 USA
- * or view the license online at http://www.gnu.org/copyleft/gpl.html
- *
- * Copyright (c) 2007  The Open Source Physics project
- *                     http://www.opensourcephysics.org
- */

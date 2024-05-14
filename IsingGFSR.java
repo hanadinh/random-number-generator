@@ -2,9 +2,11 @@ package final_project;
 
 import java.util.Random;
 
-public class IsingModelMetropolisGFSR extends IsingModelMetropolis {
-    public IsingModelMetropolisGFSR(long seed, double T) {
-        super(seed, T);
+import org.opensourcephysics.frames.LatticeFrame;
+
+public class IsingGFSR extends Ising {
+    public IsingGFSR(LatticeFrame displayFrame, long seed) {
+    	super(displayFrame, seed);
     }
 
     @Override
