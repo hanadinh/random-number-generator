@@ -1,21 +1,8 @@
-/*
- * Open Source Physics software is free software as described near the bottom of this code file.
- *
- * For additional information and documentation on Open Source Physics please see: 
- * <http://www.opensourcephysics.org/>
- */
-
 package final_project;
 import java.awt.*;
 import org.opensourcephysics.frames.*;
 
-/**
- * Ising models a two-dimensional system of interacting spins.
- *
- * @author Jan Tobochnik, Wolfgang Christian, Harvey Gould
- * @version 1.0  revised 07/05/05
- */
-public class Ising {
+public abstract class Ising {
   public static final double criticalTemperature = 2.0/Math.log(1.0+Math.sqrt(2.0));
   public int L = 32;
   public int N = L*L;                 // number of spins
@@ -30,10 +17,12 @@ public class Ising {
   public int acceptedMoves = 0;
   public double[] w = new double[9]; // array to hold Boltzmann factors
   public LatticeFrame lattice;
+  protected RandomGenerator randGen;
 
-  public void initialize(int L, LatticeFrame displayFrame) {
+  public void initialize(int L, LatticeFrame displayFrame, long seed) {
     lattice = displayFrame;
     this.L = L;
+    this.randGen = createRandomGenerator(seed);
     N = L*L;
     lattice.resizeLattice(L, L); // set lattice size
     lattice.setIndexedColor(1, Color.red);
@@ -49,6 +38,8 @@ public class Ising {
     w[8] = Math.exp(-8.0/temperature); // other array elements never occur for H = 0
     w[4] = Math.exp(-4.0/temperature);
   }
+  
+  protected abstract RandomGenerator createRandomGenerator(long seed);
 
   public double specificHeat() {
     double energySquaredAverage = energySquaredAccumulator/mcs;
@@ -75,10 +66,10 @@ public class Ising {
 
   public void doOneMCStep() {
     for(int k = 0;k<N;++k) {
-      int i = (int) (Math.random()*L);
-      int j = (int) (Math.random()*L);
+      int i = (int) (randGen.nextRandom()*L);
+      int j = (int) (randGen.nextRandom()*L);
       int dE = 2*lattice.getValue(i, j)*(lattice.getValue((i+1)%L, j)+lattice.getValue((i-1+L)%L, j)+lattice.getValue(i, (j+1)%L)+lattice.getValue(i, (j-1+L)%L));
-      if((dE<=0)||(w[dE]>Math.random())) {
+      if((dE<=0)||(w[dE]>randGen.nextRandom())) {
         int newSpin = -lattice.getValue(i, j);
         lattice.setValue(i, j, newSpin);
         acceptedMoves++;
