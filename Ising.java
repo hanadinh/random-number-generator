@@ -48,6 +48,11 @@ public abstract class Ising {
     heatCapacity = heatCapacity/(temperature*temperature);
     return(heatCapacity/N);
   }
+  
+  public double energyPerSpin() {
+	double energyAverage = energyAccumulator/mcs;
+	return(energyAverage/N);
+  }
 
   public double susceptibility() {
     double magnetizationSquaredAverage = magnetizationSquaredAccumulator/mcs;
