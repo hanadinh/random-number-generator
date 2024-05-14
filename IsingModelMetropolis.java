@@ -1,6 +1,5 @@
 package final_project;
 
-import java.util.Random;
 
 public abstract class IsingModelMetropolis {
 	protected int L;

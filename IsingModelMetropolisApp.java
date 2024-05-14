@@ -3,10 +3,7 @@ package final_project;
 import org.opensourcephysics.controls.*;
 import org.opensourcephysics.frames.*;
 
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class IsingModelMetropolisApp extends AbstractSimulation {
     private Random rand;
