@@ -73,15 +73,15 @@ public class IsingModelMetropolisApp extends AbstractSimulation {
     }
 
     private void analyzeResults() {
-        double meanEnergyLCG = energiesLCG.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-        double meanSpecificHeatLCG = specificHeatsLCG.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-        double meanEnergyGFSR = energiesGFSR.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
-        double meanSpecificHeatGFSR = specificHeatsGFSR.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+    	double meanEnergyLCG = calculateMean(energiesLCG);
+        double meanSpecificHeatLCG = calculateMean(specificHeatsLCG);
+        double meanEnergyGFSR = calculateMean(energiesGFSR);
+        double meanSpecificHeatGFSR = calculateMean(specificHeatsGFSR);
 
-        double stdEnergyLCG = Math.sqrt(energiesLCG.stream().mapToDouble(e -> Math.pow(e - meanEnergyLCG, 2)).sum() / numRuns);
-        double stdSpecificHeatLCG = Math.sqrt(specificHeatsLCG.stream().mapToDouble(c -> Math.pow(c - meanSpecificHeatLCG, 2)).sum() / numRuns);
-        double stdEnergyGFSR = Math.sqrt(energiesGFSR.stream().mapToDouble(e -> Math.pow(e - meanEnergyGFSR, 2)).sum() / numRuns);
-        double stdSpecificHeatGFSR = Math.sqrt(specificHeatsGFSR.stream().mapToDouble(c -> Math.pow(c - meanSpecificHeatGFSR, 2)).sum() / numRuns);
+        double stdEnergyLCG = calculateStdDev(energiesLCG, meanEnergyLCG);
+        double stdSpecificHeatLCG = calculateStdDev(specificHeatsLCG, meanSpecificHeatLCG);
+        double stdEnergyGFSR = calculateStdDev(energiesGFSR, meanEnergyGFSR);
+        double stdSpecificHeatGFSR = calculateStdDev(specificHeatsGFSR, meanSpecificHeatGFSR);
 
         double exactEnergy = -1.45306;
         double exactSpecificHeat = 1.49871;
@@ -96,30 +96,47 @@ public class IsingModelMetropolisApp extends AbstractSimulation {
         double ratioE_GFSR = deltaE_GFSR / stdEnergyGFSR;
         double ratioC_GFSR = deltaC_GFSR / stdSpecificHeatGFSR;
 
-        System.out.printf("LCG Mean Energy per Spin: %.5f\n", meanEnergyLCG);
-        System.out.printf("LCG Mean Specific Heat: %.5f\n", meanSpecificHeatLCG);
-        System.out.printf("LCG Energy Std Dev: %.5f\n", stdEnergyLCG);
-        System.out.printf("LCG Specific Heat Std Dev: %.5f\n", stdSpecificHeatLCG);
-        System.out.printf("LCG Delta E: %.5f\n", deltaE_LCG);
-        System.out.printf("LCG Delta C: %.5f\n", deltaC_LCG);
-        System.out.printf("LCG Ratio E: %.5f\n", ratioE_LCG);
-        System.out.printf("LCG Ratio C: %.5f\n", ratioC_LCG);
+        control.println(String.format("LCG Mean Energy per Spin: %.5f", meanEnergyLCG));
+        control.println(String.format("LCG Mean Specific Heat: %.5f", meanSpecificHeatLCG));
+        control.println(String.format("LCG Energy Std Dev: %.5f", stdEnergyLCG));
+        control.println(String.format("LCG Specific Heat Std Dev: %.5f", stdSpecificHeatLCG));
+        control.println(String.format("LCG Delta E: %.5f", deltaE_LCG));
+        control.println(String.format("LCG Delta C: %.5f", deltaC_LCG));
+        control.println(String.format("LCG Ratio E: %.5f", ratioE_LCG));
+        control.println(String.format("LCG Ratio C: %.5f", ratioC_LCG));
 
-        System.out.printf("GFSR Mean Energy per Spin: %.5f\n", meanEnergyGFSR);
-        System.out.printf("GFSR Mean Specific Heat: %.5f\n", meanSpecificHeatGFSR);
-        System.out.printf("GFSR Energy Std Dev: %.5f\n", stdEnergyGFSR);
-        System.out.printf("GFSR Specific Heat Std Dev: %.5f\n", stdSpecificHeatGFSR);
-        System.out.printf("GFSR Delta E: %.5f\n", deltaE_GFSR);
-        System.out.printf("GFSR Delta C: %.5f\n", deltaC_GFSR);
-        System.out.printf("GFSR Ratio E: %.5f\n", ratioE_GFSR);
-        System.out.printf("GFSR Ratio C: %.5f\n", ratioC_GFSR);
+        control.println(String.format("GFSR Mean Energy per Spin: %.5f", meanEnergyGFSR));
+        control.println(String.format("GFSR Mean Specific Heat: %.5f", meanSpecificHeatGFSR));
+        control.println(String.format("GFSR Energy Std Dev: %.5f", stdEnergyGFSR));
+        control.println(String.format("GFSR Specific Heat Std Dev: %.5f", stdSpecificHeatGFSR));
+        control.println(String.format("GFSR Delta E: %.5f", deltaE_GFSR));
+        control.println(String.format("GFSR Delta C: %.5f", deltaC_GFSR));
+        control.println(String.format("GFSR Ratio E: %.5f", ratioE_GFSR));
+        control.println(String.format("GFSR Ratio C: %.5f", ratioC_GFSR));
 
         boolean biasedLCG = (ratioE_LCG > 1.0 || ratioC_LCG > 1.0);
         boolean biasedGFSR = (ratioE_GFSR > 1.0 || ratioC_GFSR > 1.0);
 
-        System.out.printf("LCG Biased: %b\n", biasedLCG);
-        System.out.printf("GFSR Biased: %b\n", biasedGFSR);
+        control.println(String.format("LCG Biased: %b", biasedLCG));
+        control.println(String.format("GFSR Biased: %b", biasedGFSR));
     }
+    
+    private double calculateMean(List<Double> values) {
+        double sum = 0.0;
+        for (double value : values) {
+            sum += value;
+        }
+        return sum / values.size();
+    }
+
+    private double calculateStdDev(List<Double> values, double mean) {
+        double sum = 0.0;
+        for (double value : values) {
+            sum += Math.pow(value - mean, 2);
+        }
+        return Math.sqrt(sum / values.size());
+    }
+
 
     public static void main(String[] args) {
         SimulationControl.createApp(new IsingModelMetropolisApp());
